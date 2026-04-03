@@ -27,6 +27,8 @@ spec:
       containers:
       - name: redis
         image: redis:7.0-alpine
+        command: ["redis-server"]
+        args: ["--protected-mode", "no", "--bind", "0.0.0.0"]
         ports:
         - containerPort: 6379
         volumeMounts:
