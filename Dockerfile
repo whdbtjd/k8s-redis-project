@@ -1,7 +1,8 @@
 FROM php:8.1-fpm-alpine
 
 # Redis 확장 모듈 설치 및 Nginx 설정
-RUN apk add --no-cache nginx \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirror.kakao.com/g' /etc/apk/repositories && \
+    apk add --no-cache nginx \
     && docker-php-ext-install bcmath \
     && pecl install redis \
     && docker-php-ext-enable redis
