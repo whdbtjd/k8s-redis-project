@@ -1,8 +1,16 @@
-# 1. 베이스 이미지 선택 (가벼운 Nginx 사용)
-FROM nginx:alpine
+FROM php:8.1-fpm-alpine
 
-# 2. 간단한 텍스트를 index.html에 넣기 (빌드 확인용)
-RUN echo "<h1>K8s Redis Project Build #1 asdfasdfdsf!</h1>" > /usr/share/nginx/html/index.html
+# Redis 확장 모듈 설치 및 Nginx 설정
+RUN apk add --no-cache nginx \
+    && docker-php-ext-install bcmath \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
-# 3. 80번 포트 개방
+# Nginx 설정 파일 복사 (없으면 기본값 사용)
+COPY index.php /var/www/html/index.php
+
+# 실행 권한 및 포트 설정
 EXPOSE 80
+
+# Nginx와 PHP-FPM을 같이 띄우는 실행 명령
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
