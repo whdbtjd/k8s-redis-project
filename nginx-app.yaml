@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: whdbtjd/k8s-redis-app:latest  # <--- 본인 이미지로 교체
+        image: whdbtjd/k8s-redis-app:9
         imagePullPolicy: Always             # <--- 항상 최신 이미지를 당겨오도록 추가
         ports:
         - containerPort: 80                 # <--- 81에서 80으로 수정
