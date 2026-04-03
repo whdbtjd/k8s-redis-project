@@ -1,17 +1,17 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.1-fpm-bullseye
 
-# Redis 확장 모듈 설치 및 Nginx 설정
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirror.kakao.com/g' /etc/apk/repositories && \
-    apk add --no-cache nginx \
+# 데비안 계열(apt)은 알파인(apk)보다 네트워크 호환성이 훨씬 좋습니다.
+RUN apt-get update && apt-get install -y \
+    nginx \
     && docker-php-ext-install bcmath \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && rm -rf /var/lib/apt/lists/*
 
-# Nginx 설정 파일 복사 (없으면 기본값 사용)
+# 소스 코드 복사
 COPY index.php /var/www/html/index.php
 
-# 실행 권한 및 포트 설정
 EXPOSE 80
 
-# Nginx와 PHP-FPM을 같이 띄우는 실행 명령
+# 실행 명령 (동일)
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
