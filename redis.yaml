@@ -8,7 +8,6 @@ spec:
     targetPort: 6379
   selector:
     app: redis
-      # clusterIP: None  # Headless Service: Pod의 고정 IP가 아닌 이름을 찾아가기 위함
 ---
 apiVersion: apps/v1
 kind: StatefulSet
